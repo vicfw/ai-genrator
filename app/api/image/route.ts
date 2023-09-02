@@ -1,3 +1,4 @@
+import { checkApiLimit, increaseApiLimit } from '@/lib/api-limit';
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
@@ -29,19 +30,21 @@ export async function POST(req: Request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    try {
-      const response = await openai.images.generate({
-        prompt,
-        size: resolution,
-        n: +amount,
-      });
+    const isFreeTrailFinished = await checkApiLimit();
 
-      return NextResponse.json(response.data);
-    } catch (e) {
-      console.log(e, "couldn't connect to api from image route");
-
-      return new NextResponse("couldn't connect to api ", { status: 500 });
+    if (isFreeTrailFinished) {
+      return new NextResponse('Free trial has expired', { status: 403 });
     }
+
+    const response = await openai.images.generate({
+      prompt,
+      size: resolution,
+      n: +amount,
+    });
+
+    await increaseApiLimit();
+
+    return NextResponse.json(response.data);
   } catch (e) {
     return new NextResponse('Internal error', { status: 500 });
   }
