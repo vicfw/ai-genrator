@@ -14,6 +14,7 @@ import {
   Code,
   Settings,
 } from 'lucide-react';
+import FreeCounter from '@/components/FreeCounter';
 
 const montserrat = Montserrat({
   weight: '600',
@@ -64,7 +65,11 @@ const routes = [
   },
 ];
 
-const Sidebar = () => {
+interface SidebarProps {
+  apiLimitCount: number;
+}
+
+const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
   const pathname = usePathname();
 
   return (
@@ -75,18 +80,9 @@ const Sidebar = () => {
           className="flex flex-col items-center pl-3 mb-14 "
         >
           <div className="relative w-24 h-12 mr-4">
-            <Image
-              fill
-              alt="logo"
-              src="/logo-1.webp"
-            />
+            <Image fill alt="logo" src="/logo-1.webp" />
           </div>
-          <h1
-            className={cn(
-              'text-2xl font-bold',
-              montserrat.className,
-            )}
-          >
+          <h1 className={cn('text-2xl font-bold', montserrat.className)}>
             AI Generator
           </h1>
         </Link>
@@ -103,18 +99,14 @@ const Sidebar = () => {
               )}
             >
               <div className="flex items-center flex-1">
-                <route.icon
-                  className={cn(
-                    'h-5 w-5 mr-3',
-                    route.color,
-                  )}
-                />
+                <route.icon className={cn('h-5 w-5 mr-3', route.color)} />
                 {route.label}
               </div>
             </Link>
           ))}
         </div>
       </div>
+      <FreeCounter apiLimitCount={apiLimitCount} />
     </div>
   );
 };

@@ -17,6 +17,7 @@ import Loader from '@/components/Loader';
 import { cn } from '@/lib/utils';
 import UserAvatar from '@/components/UserAvatar';
 import BotAvatar from '@/components/BotAvatar';
+import { useProModal } from '@/hooks/use-pro-modal';
 
 interface OpenAiMessage {
   role: string;
@@ -25,6 +26,7 @@ interface OpenAiMessage {
 
 const ConversationPage = () => {
   const router = useRouter();
+  const proModal = useProModal();
   const [messages, setMessages] = useState<OpenAiMessage[]>([]);
 
   const form = useForm<Z.infer<typeof formSchema>>({
@@ -56,8 +58,9 @@ const ConversationPage = () => {
 
       form.reset();
     } catch (e: any) {
-      // TODO : open pro modal
-      console.log(e, 'from conversation page');
+      if (e?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }

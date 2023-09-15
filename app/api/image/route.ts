@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
     const isFreeTrailFinished = await checkApiLimit();
 
-    if (isFreeTrailFinished) {
+    if (!isFreeTrailFinished) {
       return new NextResponse('Free trial has expired', { status: 403 });
     }
 
@@ -43,6 +43,8 @@ export async function POST(req: Request) {
     });
 
     await increaseApiLimit();
+
+    console.log(response, 'response from image route');
 
     return NextResponse.json(response.data);
   } catch (e) {

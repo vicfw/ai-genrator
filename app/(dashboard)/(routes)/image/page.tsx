@@ -23,9 +23,11 @@ import {
 } from '@/components/ui/select';
 import { Card, CardFooter } from '@/components/ui/card';
 import Image from 'next/image';
+import { useProModal } from '@/hooks/use-pro-modal';
 
 const ImagePage = () => {
   const router = useRouter();
+  const proModal = useProModal();
 
   const [images, setImages] = useState<string[]>([]);
   const form = useForm<Z.infer<typeof formSchema>>({
@@ -51,8 +53,9 @@ const ImagePage = () => {
 
       form.reset();
     } catch (e: any) {
-      // TODO : open pro modal
-      console.log(e, 'from conversation page');
+      if (e?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }
