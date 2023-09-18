@@ -1,12 +1,20 @@
-"use client";
+'use client';
 
-import { BiMenu } from "react-icons/bi";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import Sidebar from "./Sidebar";
-import { useEffect, useState } from "react";
+import { BiMenu } from 'react-icons/bi';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import Sidebar from './Sidebar';
+import { useEffect, useState } from 'react';
 
-const MobileSidebar = () => {
+interface MobileSidebarProps {
+  apiLimitCount: number;
+  isPro: boolean;
+}
+
+const MobileSidebar = ({
+  apiLimitCount,
+  isPro = false,
+}: MobileSidebarProps) => {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
@@ -21,7 +29,7 @@ const MobileSidebar = () => {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
-        <Sidebar />
+        <Sidebar apiLimitCount={apiLimitCount} isPro={isPro} />
       </SheetContent>
     </Sheet>
   );

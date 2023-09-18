@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import * as Z from 'zod';
 import { formSchema } from './constants';
 import { useProModal } from '@/hooks/use-pro-modal';
+import toast from 'react-hot-toast';
 
 const VideoPage = () => {
   const router = useRouter();
@@ -40,6 +41,8 @@ const VideoPage = () => {
     } catch (e: any) {
       if (e?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error('Something went wrong');
       }
     } finally {
       router.refresh();

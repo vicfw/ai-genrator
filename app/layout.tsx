@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import ModalProvider from '@/components/ModalProvider';
+import { ToastProvider } from '@/components/ToasterProvider';
+import { CrispProvider } from '@/components/crispProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,8 +23,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <CrispProvider />
         <body className={inter.className}>
           <ModalProvider />
+          <ToastProvider />
           {children}
         </body>
       </html>
@@ -30,4 +34,4 @@ export default function RootLayout({
   );
 }
 
-// time 4:02:18
+// time 4:28:47

@@ -19,6 +19,7 @@ import * as Z from 'zod';
 import { formSchema } from './constants';
 import ReactMarkDown from 'react-markdown';
 import { useProModal } from '@/hooks/use-pro-modal';
+import toast from 'react-hot-toast';
 
 interface OpenAiMessage {
   role: string;
@@ -59,6 +60,8 @@ const CodePage = () => {
     } catch (e: any) {
       if (e?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error('Something went wrong');
       }
     } finally {
       router.refresh();

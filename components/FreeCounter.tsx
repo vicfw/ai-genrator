@@ -10,9 +10,10 @@ import { useProModal } from '@/hooks/use-pro-modal';
 
 interface FreeCounterProps {
   apiLimitCount: number;
+  isPro: boolean;
 }
 
-const FreeCounter = ({ apiLimitCount }: FreeCounterProps) => {
+const FreeCounter = ({ apiLimitCount, isPro = false }: FreeCounterProps) => {
   const [mounted, setMounted] = useState(false);
   const proModal = useProModal();
   useEffect(() => {
@@ -20,6 +21,10 @@ const FreeCounter = ({ apiLimitCount }: FreeCounterProps) => {
   }, []);
 
   if (!mounted) return null;
+
+  if (isPro) {
+    return null;
+  }
 
   return (
     <div className="px-3">
@@ -32,6 +37,7 @@ const FreeCounter = ({ apiLimitCount }: FreeCounterProps) => {
             <Progress
               className="h-3"
               value={(apiLimitCount / MAX_FREE_COUNTS) * 100}
+              color="red"
             />
           </div>
 

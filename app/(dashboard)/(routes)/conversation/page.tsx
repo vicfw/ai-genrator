@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
 import UserAvatar from '@/components/UserAvatar';
 import BotAvatar from '@/components/BotAvatar';
 import { useProModal } from '@/hooks/use-pro-modal';
+import toast from 'react-hot-toast';
 
 interface OpenAiMessage {
   role: string;
@@ -60,6 +61,8 @@ const ConversationPage = () => {
     } catch (e: any) {
       if (e?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error('Something went wrong');
       }
     } finally {
       router.refresh();

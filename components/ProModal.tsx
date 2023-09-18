@@ -22,49 +22,67 @@ import {
 import { Card } from './ui/card';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
+import axios from 'axios';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+
+const tools = [
+  {
+    label: 'Conversation',
+    icon: MessagesSquare,
+    color: 'text-violet-500',
+    bgColor: 'bg-violet-500/10',
+    href: '/conversation',
+  },
+  {
+    label: 'Music Generation',
+    icon: Music,
+    href: '/music',
+    color: 'text-emerald-500',
+    bgColor: 'bg-emerald-500/10',
+  },
+
+  {
+    label: 'Image Generation',
+    icon: ImageIcon,
+    href: '/image',
+    color: 'text-pink-700',
+    bgColor: 'bg-pink-700/10',
+  },
+  {
+    label: 'Video Generation',
+    icon: VideoIcon,
+    href: '/video',
+    color: 'text-orange-700',
+    bgColor: 'bg-orange-700/10',
+  },
+
+  {
+    label: 'Code Generation',
+    icon: Code,
+    href: '/code',
+    color: 'text-green-700',
+    bgColor: 'bg-green-700/10',
+  },
+];
 
 const ProModal = () => {
   const proModal = useProModal();
+  const [loading, setLoading] = useState(false);
+  const onSubscribe = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('/api/stripe');
 
-  const tools = [
-    {
-      label: 'Conversation',
-      icon: MessagesSquare,
-      color: 'text-violet-500',
-      bgColor: 'bg-violet-500/10',
-      href: '/conversation',
-    },
-    {
-      label: 'Music Generation',
-      icon: Music,
-      href: '/music',
-      color: 'text-emerald-500',
-      bgColor: 'bg-emerald-500/10',
-    },
+      window.location.href = response.data.url;
+    } catch (e) {
+      console.log(e, 'STRIPE_CLIENT_ERROR');
 
-    {
-      label: 'Image Generation',
-      icon: ImageIcon,
-      href: '/image',
-      color: 'text-pink-700',
-      bgColor: 'bg-pink-700/10',
-    },
-    {
-      label: 'Video Generation',
-      icon: VideoIcon,
-      href: '/video',
-      color: 'text-orange-700',
-      bgColor: 'bg-orange-700/10',
-    },
-
-    {
-      label: 'Code Generation',
-      icon: Code,
-      href: '/code',
-      color: 'text-green-700',
-      bgColor: 'bg-green-700/10',
-    },
-  ];
+      toast.error('Something went wrong');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Dialog open={proModal.isOpen}>
@@ -96,7 +114,13 @@ const ProModal = () => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button size="lg" variant="premium" className="w-full">
+          <Button
+            size="lg"
+            variant="premium"
+            className="w-full"
+            onClick={onSubscribe}
+            disabled={loading}
+          >
             Upgrade
             <Zap className=" w-4 h-4 fill-white ml-2" />
           </Button>
